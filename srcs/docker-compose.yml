@@ -1,0 +1,15 @@
+services:
+  mariadb:
+    container_name: mariadb
+    build:
+      context: ./requirements/mariadb
+      dockerfile: Dockerfile
+    ports:
+      - 3306:3306
+    env_file: .env
+    volumes:
+      - mariadb:/var/lib/mysql  # Persist database data
+    restart: unless-stopped
+
+volumes:
+  mariadb:
