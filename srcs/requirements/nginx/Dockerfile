@@ -10,6 +10,8 @@ RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
 
 COPY conf/nginx.conf /etc/nginx/nginx.conf
 
+RUN adduser -D -H -s /sbin/nologin -g www-data -G www-data www-data
+
 EXPOSE 443
 
 CMD ["nginx", "-g", "daemon off;"]

@@ -9,6 +9,7 @@ RUN apk update && apk add --no-cache \
     php83-mysqli \
     php83-curl \
     php83-zip \
+    php83-mbstring \
     mariadb-client
 
 # Install wp-cli (WordPress Command Line Interface) for automated setup
@@ -16,10 +17,17 @@ RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli
     chmod +x wp-cli.phar && \
     mv wp-cli.phar /usr/local/bin/wp
 
-# Create WordPress directory
+# Set up the working directory where WordPress will be installed
 WORKDIR /var/www/wp
+RUN adduser -D -H -s /sbin/nologin -g www-data -G www-data www-data
 
-# Copy entrypoint script TO DO
+# Create the PHP configuration file
+RUN echo "memory_limit=512M" > /etc/php83/php.ini
+
+# mone
+COPY conf/www.conf /etc/php83/php-fpm.d/www.conf
+
+# Copy entrypoint script
 COPY tools/wordpress_script.sh /bin/wordpress_script.sh
 RUN chmod +x /bin/wordpress_script.sh
 
