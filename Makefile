@@ -1,6 +1,6 @@
 all:
-	make up
-up:
+	mkdir -p /Users/mpellegr/data/mariadb
+	mkdir -p /Users/mpellegr/data/wordpress
 	docker compose -f ./srcs/docker-compose.yml up -d
 
 down:
@@ -10,6 +10,7 @@ clean:
 	docker compose -f ./srcs/docker-compose.yml down --volumes --rmi all
 
 fclean: clean
+	rm -rf /Users/mpellegr/data
 
 re: fclean
 	make all

@@ -8,6 +8,12 @@ services:
       - 443:443
       - 80:80
     restart: unless-stopped
+    networks:
+      - inceptionetwork
+    depends_on:
+      - wordpress
+    volumes:
+      - wordpress:/var/www/html # needs to access index.php, wp-content ecc.
   mariadb:
     container_name: mariadb
     build:
@@ -19,6 +25,38 @@ services:
     volumes:
       - mariadb:/var/lib/mysql  # Persist database data
     restart: unless-stopped
+    networks:
+      - inceptionetwork
+  wordpress:
+    container_name: wordpress
+    build: 
+      context: ./requirements/wordpress
+      dockerfile: Dockerfile
+    ports:
+      - 9000:9000
+    env_file:
+      - .env
+    volumes:
+      - wordpress:/var/www/html
+    restart: unless-stopped
+    networks:
+      - inceptionetwork
+    depends_on:
+      - mariadb
 
 volumes:
   mariadb:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /Users/mpellegr/data/mariadb #to change
+  wordpress:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /Users/mpellegr/data/wordpress #to change
+
+networks:
+  inceptionetwork:
