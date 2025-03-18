@@ -19,6 +19,8 @@ RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli
 
 # Set up the working directory where WordPress will be installed
 WORKDIR /var/www/wp
+
+# Create the PHP-FPM user (www-data is typically the user running PHP-FPM)
 RUN adduser -D -H -s /sbin/nologin -g www-data -G www-data www-data
 
 # Create the PHP configuration file
