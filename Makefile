@@ -15,7 +15,11 @@ clean:
 
 fclean: clean
 	sudo rm -rf ~/data
-	@sudo sed -i '/mpellegr.42.fr/d' /etc/hosts
+	@if [ "$(shell uname)" = "Darwin" ]; then \
+		sudo sed -i '' '/mpellegr.42.fr/d' /etc/hosts; \
+	else \
+		sudo sed -i '/mpellegr.42.fr/d' /etc/hosts; \
+	fi
 
 re: fclean
 	make all
