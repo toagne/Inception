@@ -1,4 +1,7 @@
 all:
+	@if ! grep -q mpellegr /etc/hosts; then \
+		echo 127.0.0.1	mpellegr.42.fr | sudo tee -a /etc/hosts; \
+	fi
 	@mkdir -p ~/data/mariadb
 	@mkdir -p ~/data/wordpress
 	docker compose -f ./srcs/docker-compose.yml up -d
@@ -8,9 +11,11 @@ down:
 
 clean:
 	docker compose -f ./srcs/docker-compose.yml down --volumes --rmi all
+	docker system prune -af
 
 fclean: clean
-	rm -rf ~/data
+	sudo rm -rf ~/data
+	@sudo sed -i '/mpellegr.42.fr/d' /etc/hosts
 
 re: fclean
 	make all

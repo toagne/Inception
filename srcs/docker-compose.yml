@@ -26,6 +26,12 @@ services:
     restart: unless-stopped
     networks:
       - inceptionetwork
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      retries: 30
+      start_period: 60s
+      timeout: 10s
   wordpress:
     container_name: wordpress
     build: 
@@ -41,7 +47,14 @@ services:
     networks:
       - inceptionetwork
     depends_on:
-      - mariadb
+      mariadb:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wp", "core", "is-installed", "--allow-root"]
+      interval: 10s
+      retries: 5
+      start_period: 60s
+      timeout: 10s
 
 volumes:
   mariadb:

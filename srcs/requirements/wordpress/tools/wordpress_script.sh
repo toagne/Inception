@@ -1,16 +1,14 @@
 #!/bin/sh
 
-# wait for mariadb to be ready
-until mysqladmin ping -h mariadb --silent; do 
-    echo "Waiting for database..."
+# Wait for MariaDB to be ready
+echo "Waiting for MariaDB to be ready..."
+until mysqladmin ping -h mariadb -u $MARIADB_USER -p $MARIADB_USER_PSW --silent; do
+    echo "Waiting for MariaDB..."
     sleep 2
 done
 
-# Log that we are now ready to install WordPress
-echo "MariaDB is ready. Installing WordPress..."
-
 # Ensure the WordPress installation path is clean and empty before downloading
-if ! wp core is-installed --path=/var/www/wp --allow-root; then
+if ! wp core is-installed --path=/var/www/wp --allow-root >/dev/null 2>&1; then
     echo "Downloading WordPress..."
 
     # download WordPress if it's not installed
